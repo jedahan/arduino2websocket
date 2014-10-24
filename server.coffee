@@ -1,31 +1,32 @@
+util = require 'util'
 SerialPort = require('serialport').SerialPort
 serial = new SerialPort '/dev/ttyACM0', { baudrate: 57600 }
-serial.on 'open', ->
-  console.log 'comm port online'
-  serial.on 'data', (data) ->
-    console.log "data! #{data}"
 
-# koa, from the makers of express
-koa = require 'koa'
-time = require 'koa-response-time'
-serve = require 'koa-static'
-logger = require 'koa-logger'
-websocket = require 'koa-ws'
+socket = null
+x = 0
 
-websocket_options = {
-  serveClientFile: true,
-  clientFilePath: '/ws.js',
-  heartbeat: true,
-  heartbeatInterval: 5000
-}
+express = require('express')
+express_ws = require('express-ws')
+app = express_ws(express())
 
-# choose our middleware here
-app = koa()
-app.use time()
-app.use logger()
-app.use websocket(app, websocket_options)
-app.use serve(__dirname + '/public')
+app.get '/', (req, res) ->
+  res.sendFile "#{__dirname}/index.html"
+
+app.ws '/', (ws, req) ->
+  ws.on 'message', (msg) ->
+    if msg is 'ready' and socket is null
+      socket = ws
+  ws.on 'error', (err) ->
+    socket = null
+  ws.on 'close', ->
+    socket = null
 
 app.listen process.env.PORT or 5000, ->
-  port = @_connectionKey.split(':')[2]
-  console.log "[#{process.pid}] listening on :#{port}"
+  console.log "[#{process.pid}] listening on :#{process.env.PORT or 5000}"
+  serial.on 'open', ->
+    #setInterval (-> socket?.send("hi!, im #{x++} goldblum!")), 1000
+    serial.on 'data', (data) ->
+      socket?.send "#{data}"
+      console.log "#{data}"
+       #console.log +data
+#      socket?.send +data

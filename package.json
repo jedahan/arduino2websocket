@@ -13,16 +13,14 @@
   "author": "Jonathan Dahan <jonathan@jonathan.is>",
   "dependencies": {
     "coffee-script": "git://github.com/jashkenas/coffeescript",
-    "koa": "^0.13.0",
-    "koa-logger": "^1.2.2",
-    "koa-response-time": "^1.0.2",
-    "koa-static": "^1.4.7",
-    "koa-ws": "^0.2.3",
+    "express": "^4.9.8",
+    "express-ws": "^0.2.1",
+    "express.io": "^1.1.13",
     "serialport": "^1.4.6"
   },
   "engines": {
-    "node": "^0.11.14",
-    "npm": "^2.0.0"
+    "node": "^0.10.33",
+    "npm": "^1.4.28"
   },
   "scripts": {
     "start": "coffee --nodejs --harmony server.coffee"
