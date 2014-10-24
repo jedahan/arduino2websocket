@@ -3,7 +3,6 @@ SerialPort = require('serialport').SerialPort
 serial = new SerialPort '/dev/ttyACM0', { baudrate: 57600 }
 
 socket = null
-x = 0
 
 express = require('express')
 express_ws = require('express-ws')
@@ -24,9 +23,6 @@ app.ws '/', (ws, req) ->
 app.listen process.env.PORT or 5000, ->
   console.log "[#{process.pid}] listening on :#{process.env.PORT or 5000}"
   serial.on 'open', ->
-    #setInterval (-> socket?.send("hi!, im #{x++} goldblum!")), 1000
     serial.on 'data', (data) ->
       socket?.send "#{data}"
       console.log "#{data}"
-       #console.log +data
-#      socket?.send +data
