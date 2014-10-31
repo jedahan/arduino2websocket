@@ -6,21 +6,28 @@
 HI!
 
 <script>
-  var ws = new WebSocket("ws://192.168.0.130:5000/");
+  var my_number = 0;
+  var ws = new WebSocket("ws://localhost:5000/");
+//  var ws = new WebSocket("ws://149.31.146.39:5000/");
 
   ws.onmessage = function(event) {
     event.data.split('&').forEach(function(datum){
-        if(datum !== ""){
-	  console.log(datum);
-	}
+      if(datum !== ""){
+	      //console.log(datum);
+        my_number = +(datum);
+	    }
     })
   };
+
   ws.onopen = function() {
     ws.send("ready");
+    console.log("ready");
   }
+
   ws.onerror = function(error) {
     console.log(error);
   }
+
   ws.onclose = function() {
     console.log("closed");
   }

@@ -25,4 +25,4 @@ app.listen process.env.PORT or 5000, ->
   serial.on 'open', ->
     serial.on 'data', (data) ->
       socket?.send "#{data}"
-      console.log "#{data}"
+      #console.log "#{data}"
